@@ -7,8 +7,8 @@ Code to compute spike-triggered average.
 """
 
 from __future__ import division
+
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def compute_sta(stim, rho, num_timesteps):
@@ -21,7 +21,7 @@ def compute_sta(stim, rho, num_timesteps):
         
     Returns:
         spike-triggered average for specified number of timesteps before spike"""
-    
+
     sta = np.zeros((num_timesteps,))
 
     # This command finds the indices of all of the spikes that occur
@@ -30,8 +30,8 @@ def compute_sta(stim, rho, num_timesteps):
 
     # Fill in this value. Note that you should not count spikes that occur
     # before 300 ms into the recording.
-    num_spikes = 
-    
+    num_spikes = np.count_nonzero(rho[num_timesteps:])
+
     # Compute the spike-triggered average of the spikes found.
     # To do this, compute the average of all of the vectors
     # starting 300 ms (exclusive) before a spike and ending at the time of
@@ -41,5 +41,8 @@ def compute_sta(stim, rho, num_timesteps):
     # element-wise manner.
     # 
     # Your code goes here.
-    
+    for pos in spike_times:
+        sta += stim[pos - num_timesteps + 1:pos + 1]
+    sta /= num_spikes
+
     return sta
